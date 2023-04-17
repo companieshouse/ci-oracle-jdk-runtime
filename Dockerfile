@@ -9,4 +9,5 @@ RUN dnf update -y && \
     gzip && \
     dnf clean all && \
     wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.rpm && \
-    rpm -Uvh jdk-17_linux-x64_bin.rpm
+    rpm -Uvh jdk-17_linux-x64_bin.rpm && \
+    rm -f jdk-17_linux-x64_bin.rpm
