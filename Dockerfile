@@ -1,13 +1,17 @@
-ARG CORE_VERSION="latest"
-FROM 416670754337.dkr.ecr.eu-west-2.amazonaws.com/ci-core-runtime:${CORE_VERSION}
+FROM 416670754337.dkr.ecr.eu-west-2.amazonaws.com/ci-core-runtime:1.1.0
+
+ARG JDK_VERSION=21.0.9
+
+SHELL ["/bin/bash", "-c"]
 
 RUN dnf update -y && \
-    dnf install -y  \
-    tar \
-    wget \
-    unzip \
-    gzip && \
+    dnf clean all
+
+RUN if [[ "$(arch)" == "x86_64" ]]; then jdk_arch="x64"; else jdk_arch="$(arch)"; fi && \
+    curl -ksL "https://download.oracle.com/java/21/archive/jdk-${JDK_VERSION}_linux-${jdk_arch}_bin.rpm" \
+        -o "/tmp/jdk-${JDK_VERSION}_linux-${jdk_arch}_bin.rpm" && \
+    dnf -y install "/tmp/jdk-${JDK_VERSION}_linux-${jdk_arch}_bin.rpm" && \
     dnf clean all && \
-    wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.rpm && \
-    rpm -Uvh jdk-17_linux-x64_bin.rpm && \
-    rm -f jdk-17_linux-x64_bin.rpm
+    rm "/tmp/jdk-${JDK_VERSION}_linux-${jdk_arch}_bin.rpm"
+
+ENV JAVA_HOME="/etc/alternatives/java_jdk_21_oracle"
