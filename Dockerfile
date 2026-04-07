@@ -8,7 +8,7 @@ RUN dnf update -y && \
     dnf clean all
 
 RUN if [[ "$(arch)" == "x86_64" ]]; then jdk_arch="x64"; else jdk_arch="$(arch)"; fi && \
-    curl -ksL "https://download.oracle.com/java/21/archive/jdk-${JDK_VERSION}_linux-${jdk_arch}_bin.rpm" \
+    curl -sL "https://download.oracle.com/java/21/archive/jdk-${JDK_VERSION}_linux-${jdk_arch}_bin.rpm" \
         -o "/tmp/jdk-${JDK_VERSION}_linux-${jdk_arch}_bin.rpm" && \
     dnf -y install "/tmp/jdk-${JDK_VERSION}_linux-${jdk_arch}_bin.rpm" && \
     dnf clean all && \
